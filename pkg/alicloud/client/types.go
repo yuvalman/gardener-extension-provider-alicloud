@@ -24,7 +24,7 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/sts"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/vpc"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	ros "github.com/gardener/gardener-extension-provider-alicloud/pkg/alicloud/client/ros"
+	"github.com/gardener/gardener-extension-provider-alicloud/pkg/alicloud/client/ros"
 
 	corev1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -108,6 +108,7 @@ type VPC interface {
 	DeleteNatGateway(request *vpc.DeleteNatGatewayRequest) (response *vpc.DeleteNatGatewayResponse, err error)
 	DescribeSnatTableEntries(request *vpc.DescribeSnatTableEntriesRequest) (response *vpc.DescribeSnatTableEntriesResponse, err error)
 	DescribeEipAddresses(request *vpc.DescribeEipAddressesRequest) (response *vpc.DescribeEipAddressesResponse, err error)
+	ListEnhanhcedNatGatewayAvailableZones(request *vpc.ListEnhanhcedNatGatewayAvailableZonesRequest) (response *vpc.ListEnhanhcedNatGatewayAvailableZonesResponse, err error)
 }
 
 // ramClient implements the RAM interface.

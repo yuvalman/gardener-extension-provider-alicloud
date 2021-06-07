@@ -670,6 +670,21 @@ func (mr *MockVPCMockRecorder) GetVPCWithID(arg0, arg1 interface{}) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetVPCWithID", reflect.TypeOf((*MockVPC)(nil).GetVPCWithID), arg0, arg1)
 }
 
+// ListEnhanhcedNatGatewayAvailableZones mocks base method.
+func (m *MockVPC) ListEnhanhcedNatGatewayAvailableZones(arg0 *vpc.ListEnhanhcedNatGatewayAvailableZonesRequest) (*vpc.ListEnhanhcedNatGatewayAvailableZonesResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListEnhanhcedNatGatewayAvailableZones", arg0)
+	ret0, _ := ret[0].(*vpc.ListEnhanhcedNatGatewayAvailableZonesResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListEnhanhcedNatGatewayAvailableZones indicates an expected call of ListEnhanhcedNatGatewayAvailableZones.
+func (mr *MockVPCMockRecorder) ListEnhanhcedNatGatewayAvailableZones(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListEnhanhcedNatGatewayAvailableZones", reflect.TypeOf((*MockVPC)(nil).ListEnhanhcedNatGatewayAvailableZones), arg0)
+}
+
 // MockOSS is a mock of OSS interface.
 type MockOSS struct {
 	ctrl     *gomock.Controller

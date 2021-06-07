@@ -15,10 +15,15 @@
 package validation
 
 import (
-	apisalicloud "github.com/gardener/gardener-extension-provider-alicloud/pkg/apis/alicloud"
+	"fmt"
+
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/vpc"
 	cidrvalidation "github.com/gardener/gardener/pkg/utils/validation/cidr"
 	apivalidation "k8s.io/apimachinery/pkg/api/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
+
+	alicloudclient "github.com/gardener/gardener-extension-provider-alicloud/pkg/alicloud/client"
+	apisalicloud "github.com/gardener/gardener-extension-provider-alicloud/pkg/apis/alicloud"
 )
 
 // ValidateInfrastructureConfig validates a InfrastructureConfig object.
@@ -138,4 +143,26 @@ func ValidateNatGatewayConfig(natGateway *apisalicloud.NatGatewayConfig, fldPath
 	}
 
 	return allErrs
+}
+
+func ValidateZoneForNATGateway(vpcClient alicloudclient.VPC, infra *apisalicloud.InfrastructureConfig) error {
+	request := vpc.CreateListEnhanhcedNatGatewayAvailableZonesRequest()
+	response, err := vpcClient.ListEnhanhcedNatGatewayAvailableZones(request)
+	if err != nil {
+		return err
+	}
+
+	valid := false
+	for _, zone := range response.Zones {
+		if zone.ZoneId == infra.Networks.Zones[0].Name {
+			valid = true
+			break
+		}
+	}
+
+	if !valid {
+		return fmt.Errorf("zone %s does not support enhanced natgateway now. Please make sure the first zone in network be in %v", infra.Networks.Zones[0].Name, response.Zones)
+	}
+
+	return nil
 }
