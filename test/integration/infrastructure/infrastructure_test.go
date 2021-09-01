@@ -250,9 +250,11 @@ func runTest(ctx context.Context, logger *logrus.Entry, c client.Client, provide
 		return err
 	}
 
-	By("wait until encrypted image is ready")
-	if err := verifyStackExists(ctx, clientFactory); err != nil {
-		return err
+	if enableEncryptedImage {
+		By("wait until encrypted image is ready")
+		if err := verifyStackExists(ctx, clientFactory); err != nil {
+			return err
+		}
 	}
 
 	By("wait until infrastructure is created")
@@ -327,7 +329,6 @@ func newInfrastructure(namespace string, providerConfig *alicloudv1alpha1.Infras
 				Namespace: namespace,
 			},
 			Region:       *region,
-			SSHPublicKey: []byte(sshPublicKey),
 		},
 	}, nil
 }
@@ -466,7 +467,6 @@ func verifyCreation(
 	describeKeyPairsReq.KeyPairName = infra.Namespace + sshKeySuffix
 	describeKeyPairOutput, err := ecsClient.DescribeKeyPairs(describeKeyPairsReq)
 	Expect(err).NotTo(HaveOccurred())
-	Expect(describeKeyPairOutput.KeyPairs.KeyPair[0].KeyPairFingerPrint).To(Equal(sshPublicKeyDigest))
 	infrastructureIdentifier.keyPairName = pointer.StringPtr(describeKeyPairOutput.KeyPairs.KeyPair[0].KeyPairName)
 
 	return
